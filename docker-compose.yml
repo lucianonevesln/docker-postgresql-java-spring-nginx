@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  banco_de_dados:
+    container_name: banco_de_dados
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=agenda_de_contatos
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data-postgres:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: "150MB"
+    networks:
+      docker_network_padrao:
+        ipv4_address: 172.18.0.10
+
+  api_agenda_de_contatos_1:
+    container_name: api_agenda_de_contatos_1
+    build: .
+    depends_on:
+      - banco_de_dados
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "200MB"
+    networks:
+      - docker_network_padrao
+
+  api_agenda_de_contatos_2:
+    container_name: api_agenda_de_contatos_2
+    build: .
+    depends_on:
+      - banco_de_dados
+    ports:
+      - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "200MB"
+    networks:
+      - docker_network_padrao
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./config/nginx.config:/etc/nginx/nginx.config:ro
+    depends_on:
+      - api_agenda_de_contatos_1
+      - api_agenda_de_contatos_2
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "50MB"
+    ports:
+      - "9999:9999"
+    networks:
+      - docker_network_padrao
+
+networks:
+  docker_network_padrao:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

@@ -1,0 +1,12 @@
+  api_agenda_1:
+    container_name: api_agenda_1
+    build: .
+    depends_on:
+      - banco_de_dados
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.525"
+          memory: "210MB"
