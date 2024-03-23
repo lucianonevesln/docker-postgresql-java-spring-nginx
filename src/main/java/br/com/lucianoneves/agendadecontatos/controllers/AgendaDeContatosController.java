@@ -33,7 +33,10 @@ public class AgendaDeContatosController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizarUmContatoController(@PathVariable(value = "id") Integer id, @RequestBody AgendaDeContatosDtoParam agendaDeContatosDtoParam) {
+    public ResponseEntity<Object> atualizarUmContatoController(
+            @PathVariable(value = "id") Integer id,
+            @RequestBody AgendaDeContatosDtoParam agendaDeContatosDtoParam
+    ) {
         return agendaDeContatosService.atualizarUmContatoService(id, agendaDeContatosDtoParam);
     }
 

@@ -55,16 +55,22 @@ public class AgendaDeContatosService {
         List<AgendaDeContatosDto> agendaDeContatosDtoList = new ArrayList<>();
 
         agendaDeContatosEntityList.stream().forEach(agendaDeContatosEntity -> {
+
             AgendaDeContatosDto agendaDeContatosDto = new AgendaDeContatosDto();
             agendaDeContatosDto.setNome(agendaDeContatosEntity.getNome());
             agendaDeContatosDto.setEmail(agendaDeContatosEntity.getEmail());
             agendaDeContatosDto.setTelefone(agendaDeContatosEntity.getTelefone());
             agendaDeContatosDto.setDataDoCadastro(
-                    agendaDeContatosEntity.getDataDoCadastro() != null ? formatter.format(agendaDeContatosEntity.getDataDoCadastro()) : null
+                    agendaDeContatosEntity.getDataDoCadastro() != null
+                            ? formatter.format(agendaDeContatosEntity.getDataDoCadastro())
+                            : null
             );
             agendaDeContatosDto.setDataDaAlteracao(
-                    agendaDeContatosEntity.getDataDaAlteracao() != null ? formatter.format(agendaDeContatosEntity.getDataDaAlteracao()) : null
+                    agendaDeContatosEntity.getDataDaAlteracao() != null
+                            ? formatter.format(agendaDeContatosEntity.getDataDaAlteracao())
+                            : null
             );
+
             agendaDeContatosDtoList.add(agendaDeContatosDto);
         });
 
@@ -75,21 +81,29 @@ public class AgendaDeContatosService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Optional<AgendaDeContatosDto> agendaDeContatosDto = agendaDeContatosRepository.findById(id).map(resultado -> {
+
             AgendaDeContatosDto agendaDeContatosDtoResultado = new AgendaDeContatosDto();
             agendaDeContatosDtoResultado.setNome(resultado.getNome());
             agendaDeContatosDtoResultado.setEmail(resultado.getEmail());
             agendaDeContatosDtoResultado.setTelefone(resultado.getTelefone());
             agendaDeContatosDtoResultado.setDataDoCadastro(formatter.format(resultado.getDataDoCadastro()));
             agendaDeContatosDtoResultado.setDataDaAlteracao(
-                    resultado.getDataDaAlteracao() != null ? formatter.format(resultado.getDataDaAlteracao()) : null
+                    resultado.getDataDaAlteracao() != null
+                            ? formatter.format(resultado.getDataDaAlteracao())
+                            : null
             );
+
             return agendaDeContatosDtoResultado;
         });
 
         if (agendaDeContatosDto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(agendaDeContatosDto);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(agendaDeContatosDto);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id não localizado");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Id não localizado");
         }
     }
 
@@ -98,12 +112,15 @@ public class AgendaDeContatosService {
         Optional<AgendaDeContatosEntity> agendaDeContatosEntityOptional = agendaDeContatosRepository.findById(id);
 
         if (!agendaDeContatosEntityOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id não encontrado.");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Id não encontrado.");
         }
 
         AgendaDeContatosEntity agendaDeContatosEntity = new AgendaDeContatosEntity();
         BeanUtils.copyProperties(agendaDeContatosDtoParam, agendaDeContatosEntity);
         agendaDeContatosEntity.setId(agendaDeContatosEntityOptional.get().getId());
+
         if (agendaDeContatosDtoParam.getNome() != null) {
             agendaDeContatosEntity.setNome(agendaDeContatosDtoParam.getNome());
         } else {
@@ -119,10 +136,13 @@ public class AgendaDeContatosService {
         } else {
             agendaDeContatosEntity.setTelefone(agendaDeContatosEntityOptional.get().getTelefone());
         }
+
         agendaDeContatosEntity.setDataDoCadastro(agendaDeContatosEntityOptional.get().getDataDoCadastro());
         agendaDeContatosEntity.setDataDaAlteracao(LocalDateTime.now());
 
-        return ResponseEntity.status(HttpStatus.OK).body(agendaDeContatosRepository.save(agendaDeContatosEntity));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(agendaDeContatosRepository.save(agendaDeContatosEntity));
     }
 
     public ResponseEntity<Object> deletarUmContatoService(Integer id) {
@@ -130,9 +150,13 @@ public class AgendaDeContatosService {
 
         if (agendaDeContatosEntity.isPresent()) {
             agendaDeContatosRepository.delete(agendaDeContatosEntity.get());
-            return ResponseEntity.status(HttpStatus.OK).body("Objeto excluído com sucesso!");
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Objeto excluído com sucesso!");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id não encontrado.");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Id não encontrado.");
         }
     }
 }

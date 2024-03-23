@@ -10,7 +10,13 @@ public class AgendaDeContatosDto {
     public AgendaDeContatosDto() {
     }
 
-    public AgendaDeContatosDto(String nome, String email, String telefone, String dataDoCadastro, String dataDaAlteracao) {
+    public AgendaDeContatosDto(
+            String nome,
+            String email,
+            String telefone,
+            String dataDoCadastro,
+            String dataDaAlteracao
+    ) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
